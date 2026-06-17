@@ -2,6 +2,8 @@
 import { useRealtimeState } from '@/hooks/useRealtimeState';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { exportTransactionsToPDF } from '@/lib/export/pdf';
+import { exportTransactionsToExcel } from '@/lib/export/excel';
 
 interface Category {
   id: string;
@@ -64,7 +66,17 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Transacciones</h2>
+      <div className="flex justify-between items-center flex-wrap gap-4">
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Transacciones</h2>
+        <div className="flex space-x-2">
+          <button id="btn-export-pdf" onClick={() => exportTransactionsToPDF(transactions)} className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold py-2 px-4 rounded-xl transition-colors shadow-sm">
+            Exportar PDF
+          </button>
+          <button id="btn-export-excel" onClick={() => exportTransactionsToExcel(transactions)} className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold py-2 px-4 rounded-xl transition-colors shadow-sm">
+            Exportar Excel
+          </button>
+        </div>
+      </div>
       
       {/* Create Transaction form */}
       <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
