@@ -22,7 +22,7 @@ export function useRealtimeState<T extends { id: string }>(
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: tableName },
-        (payload) => {
+        (payload: any) => {
           if (payload.eventType === 'INSERT') {
             setState((prev) => [...prev, payload.new as T]);
           } else if (payload.eventType === 'UPDATE') {
