@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -27,14 +27,12 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session if expired
   const { data: { user } } = await supabase.auth.getUser();
 
   const isAuthPage = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register');
   const isApiRoute = request.nextUrl.pathname.startsWith('/api');
   const isRootPath = request.nextUrl.pathname === '/';
 
-  // Gating access
   if (!user && !isAuthPage && !isRootPath && !isApiRoute) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
@@ -46,6 +44,6 @@ export async function middleware(request: NextRequest) {
   return supabaseResponse;
 }
 
-export const config = {
+export const proxyConfig = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };
