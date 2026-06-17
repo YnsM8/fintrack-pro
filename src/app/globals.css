@@ -139,4 +139,12 @@ body {
   html {
     @apply font-sans;
   }
+  select option {
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+  .dark select option {
+    background-color: #1e293b;
+    color: #ffffff;
+  }
 }
