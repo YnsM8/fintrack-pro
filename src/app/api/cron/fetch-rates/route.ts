@@ -1,8 +1,15 @@
 import { createClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET || 'sb_cron_secret_key_2026';
+    
+    if (authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
     const res = await fetch('https://open.er-api.com/v6/latest/USD');
     const data = await res.json();
     if (!data || !data.rates) {
