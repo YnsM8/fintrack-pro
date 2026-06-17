@@ -6,8 +6,23 @@
   --color-accent: #3b82f6;
 }
 
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --border: #e2e8f0;
+}
+
+.dark {
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+  --border: #1e293b;
+}
+
 body {
-  background-color: var(--color-secondary);
-  color: #f8fafc;
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: 'Inter', sans-serif;
+  transition: background-color 0.2s, color 0.2s;
 }
