@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { Logo } from '@/components/logo';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
@@ -29,7 +30,7 @@ export default function LoginPage() {
     if (error) {
       setError(error.message);
     } else {
-      router.push('/');
+      router.push('/dashboard');
       router.refresh();
     }
   };
@@ -37,7 +38,10 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
       <div ref={containerRef} className="w-full max-w-md rounded-2xl bg-slate-900 p-8 shadow-2xl border border-slate-800">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">FinTrack Pro</h2>
+        <div className="flex flex-col items-center justify-center space-y-3 mb-6">
+          <Logo className="w-12 h-12" />
+          <h2 className="text-3xl font-black text-center text-white">FinTrack Pro</h2>
+        </div>
         {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

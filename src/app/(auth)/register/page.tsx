@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { Logo } from '@/components/logo';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
@@ -50,7 +51,10 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
       <div ref={containerRef} className="w-full max-w-md rounded-2xl bg-slate-900 p-8 shadow-2xl border border-slate-800">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">Registro FinTrack Pro</h2>
+        <div className="flex flex-col items-center justify-center space-y-3 mb-6">
+          <Logo className="w-12 h-12" />
+          <h2 className="text-3xl font-black text-center text-white">Registro FinTrack Pro</h2>
+        </div>
         {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
         
         {success ? (

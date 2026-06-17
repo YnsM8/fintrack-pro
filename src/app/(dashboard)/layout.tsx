@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { LayoutDashboard, Receipt, PiggyBank, FolderHeart, Lightbulb, LogOut, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Receipt, PiggyBank, FolderHeart, Lightbulb, LogOut, Sun, Moon, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { Logo } from '@/components/logo';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [darkMode, setDarkMode] = useState(true);
@@ -39,9 +40,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">FinTrack Pro</h1>
+          <div className="flex items-center space-x-2.5 mb-8">
+            <Logo className="w-8 h-8" />
+            <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">FinTrack Pro</span>
+          </div>
           <nav className="space-y-2">
-            <Link id="nav-dashboard" href="/" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+            <Link id="nav-dashboard" href="/dashboard" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
               <LayoutDashboard size={20} />
               <span>Dashboard</span>
             </Link>
@@ -60,6 +64,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Link id="nav-budgets" href="/budgets" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
               <Lightbulb size={20} />
               <span>Presupuestos</span>
+            </Link>
+            <Link id="nav-investments" href="/investments" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+              <TrendingUp size={20} />
+              <span>Inversiones</span>
             </Link>
           </nav>
         </div>

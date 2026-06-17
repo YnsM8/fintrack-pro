@@ -32,14 +32,15 @@ export async function middleware(request: NextRequest) {
 
   const isAuthPage = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register');
   const isApiRoute = request.nextUrl.pathname.startsWith('/api');
+  const isRootPath = request.nextUrl.pathname === '/';
 
   // Gating access
-  if (!user && !isAuthPage && !isApiRoute) {
+  if (!user && !isAuthPage && !isRootPath && !isApiRoute) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
   if (user && isAuthPage) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return supabaseResponse;
