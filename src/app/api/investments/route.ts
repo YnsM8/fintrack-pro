@@ -67,8 +67,8 @@ export async function GET(req: NextRequest) {
     const now = new Date();
     const tenMinutesAgo = new Date(now.getTime() - 10 * 60 * 1000);
 
-    // Refresh prices if stale
-    for (const [assetId, asset] of uniqueAssetsMap.entries()) {
+    // Refresh prices if stale concurrently
+    const refreshPromises = Array.from(uniqueAssetsMap.entries()).map(async ([assetId, asset]) => {
       const lastFetched = new Date(asset.last_fetched_at);
       if (lastFetched < tenMinutesAgo || asset.current_price === 0) {
         const newPrice = await getLivePrice(asset.symbol, asset.type as 'stock' | 'crypto');
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
           asset.current_price = newPrice;
           asset.last_fetched_at = now.toISOString();
 
-          // Save refreshed price to DB (runs in background/lazy)
+          // Save refreshed price to DB
           await supabase
             .from('investment_assets')
             .update({
@@ -86,7 +86,9 @@ export async function GET(req: NextRequest) {
             .eq('id', asset.id);
         }
       }
-    }
+    });
+
+    await Promise.all(refreshPromises);
 
     // Portfolio metrics computation
     const portfolio: Record<string, any> = {};
