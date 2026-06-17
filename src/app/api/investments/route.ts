@@ -194,6 +194,36 @@ export async function POST(req: NextRequest) {
       asset = newAsset;
     }
 
+    // If it is a sell transaction, validate user balance
+    if (txType === 'sell') {
+      const { data: userTxs, error: fetchTxErr } = await supabase
+        .from('investment_transactions')
+        .select('shares_quantity, type')
+        .eq('user_id', user.id)
+        .eq('asset_id', asset.id);
+
+      if (fetchTxErr) {
+        return NextResponse.json({ error: fetchTxErr.message }, { status: 400 });
+      }
+
+      let ownedShares = 0;
+      if (userTxs) {
+        userTxs.forEach((tx: any) => {
+          if (tx.type === 'buy') {
+            ownedShares += Number(tx.shares_quantity);
+          } else if (tx.type === 'sell') {
+            ownedShares -= Number(tx.shares_quantity);
+          }
+        });
+      }
+
+      if (ownedShares < Number(shares)) {
+        return NextResponse.json({ 
+          error: `Fondos/acciones insuficientes para realizar la venta. Posee: ${ownedShares}, intenta vender: ${shares}` 
+        }, { status: 400 });
+      }
+    }
+
     // Insert transaction
     const { error: txErr } = await supabase
       .from('investment_transactions')
